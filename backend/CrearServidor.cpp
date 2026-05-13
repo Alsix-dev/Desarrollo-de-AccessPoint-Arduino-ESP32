@@ -1,14 +1,19 @@
-/*
- * Ejemplo de servidor Web para ESP32
- */
-#include <WiFi.h>
 #include <WebServer.h>
-
-const char *ssid = "Wifi-ESP32";
+#include <CrearServidor.h>
 
 WebServer server(80);
 
-void handleRoot() {
+void mainWebServer(){
+  server.on("/", handleRoot);
+  server.on("/test.svg", drawGraph);
+  server.on("/inline", handleInline);
+  server.onNotFound(handleNotFound);
+  server.begin();
+  
+  Serial.println("HTTP server started");
+}
+
+void handleRoot(){
   char temp[400];
   int sec = millis() / 1000;
   int min = sec / 60;
@@ -34,7 +39,7 @@ void handleRoot() {
   server.send(200, "text/html", temp);
 }
 
-void handleNotFound() {
+void handleNotFound(){
   String message = "Archivo no encontrado\n\n";
   message += "URI: ";
   message += server.uri();
@@ -55,32 +60,12 @@ void handleInline(){
   server.send(200, "text/plain", "Usted a accedido al recurso inline''");
 }
 
-void setup(void) {
-  
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println("Configurando punto de acceso...");
-  
-  WiFi.softAP(ssid);
-
-  IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
-
-  server.on("/", handleRoot);
-  server.on("/test.svg", drawGraph);
-  server.on("/inline", handleInline);
-  server.onNotFound(handleNotFound);
-  server.begin();
-  
-  Serial.println("HTTP server started");
-}
-
-void loop(void) {
+void clienteConecta(){
+  // Verifica continuamente si un cliente intenta conectarse al servidor o enviar una peticion HTTP.
   server.handleClient();
 }
 
-void drawGraph() {
+void drawGraph(){
   String out = "";
   char temp[100];
   out += "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"400\" height=\"150\">\n";
