@@ -1,9 +1,5 @@
-/*
- * Ejemplo de servidor Web para ESP32
- */
 #include <CrearWifi.h>
 #include <CrearServidor.h>
-
 void setup(void) {
   Serial.begin(115200);
   delay(2000);
@@ -13,6 +9,9 @@ void setup(void) {
 
   // Cargando asignacion de rol de servidor.
   mainWebServer();
+
+  // Cargando el filesystem y archivos.
+  montarFilesystem();
 }
 
 void loop(void) {
