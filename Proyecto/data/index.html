@@ -10,6 +10,11 @@
 </head>
 
 <body>
+    <section>
+        <p>Señal digital</p>
+        <img id="graficaSignal" src="/grafica">
+    </section>
+
     <section class="Bandeja">
         <p>Bandeja de mensajes</p>
         <textarea id="bandejaEntradaESP" readonly></textarea>
@@ -40,6 +45,8 @@
             });
 
             cargarMensaje();
+
+            document.getElementById("graficaSignal").src = "/grafica?t=" + new Date().getTime();
         }
 
 

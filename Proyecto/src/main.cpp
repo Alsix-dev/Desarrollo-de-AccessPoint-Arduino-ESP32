@@ -34,6 +34,96 @@ void handleEnviarMensaje(){
   }
 }
 
+void handleGrafica(){
+
+    String binario = "";
+
+    // =====================================
+    // Convertir mensaje a binario
+    // =====================================
+
+    for(int i = 0; i < mensajeESP.length(); i++){
+
+        char c = mensajeESP[i];
+
+        for(int bit = 7; bit >= 0; bit--){
+
+            if(c & (1 << bit)){
+                binario += "1";
+            }
+            else{
+                binario += "0";
+            }
+        }
+    }
+
+    // =====================================
+    // Crear SVG
+    // =====================================
+
+    String svg = "";
+
+    svg += "<svg xmlns='http://www.w3.org/2000/svg' ";
+    svg += "width='1200' height='220'>";
+
+    svg += "<rect width='100%' height='100%' fill='white'/>";
+
+    int x = 20;
+
+    int anchoBit = 40;
+
+    int yAnterior = 150;
+
+    for(int i = 0; i < binario.length(); i++){
+
+        char bit = binario[i];
+
+        int yActual;
+
+        if(bit == '1'){
+            yActual = 50;
+        }
+        else{
+            yActual = 150;
+        }
+
+        // ==============================
+        // Línea vertical de transición
+        // ==============================
+
+        if(i != 0){
+
+            svg += "<line ";
+            svg += "x1='" + String(x) + "' ";
+            svg += "y1='" + String(yAnterior) + "' ";
+            svg += "x2='" + String(x) + "' ";
+            svg += "y2='" + String(yActual) + "' ";
+            svg += "stroke='black' ";
+            svg += "stroke-width='3' />";
+        }
+
+        // ==============================
+        // Línea horizontal del bit
+        // ==============================
+
+        svg += "<line ";
+        svg += "x1='" + String(x) + "' ";
+        svg += "y1='" + String(yActual) + "' ";
+        svg += "x2='" + String(x + anchoBit) + "' ";
+        svg += "y2='" + String(yActual) + "' ";
+        svg += "stroke='black' ";
+        svg += "stroke-width='3' />";
+
+        yAnterior = yActual;
+
+        x += anchoBit;
+    }
+
+    svg += "</svg>";
+
+    server.send(200, "image/svg+xml", svg);
+}
+
 // ===================================
 // ===================================
 // FILESYSTEM
@@ -128,6 +218,7 @@ void setup(void) {
   //Registrar endpoint para la interaccion ESP32-Frontend
   server.on("/mensaje", HTTP_GET, handleMensaje);
   server.on("/enviar", HTTP_POST, handleEnviarMensaje);
+  server.on("/grafica", HTTP_GET, handleGrafica);
 
   // ----------------------------------------------------
   server.onNotFound(handleNotFound);
