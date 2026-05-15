@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 
     <title>Red Privada</title>
 </head>
@@ -12,19 +12,18 @@
 <body>
     <section class="Bandeja">
         <p>Bandeja de mensajes</p>
-        <textarea></textarea>
+        <textarea id="bandejaEntradaESP" readonly></textarea>
     </section>
 
     <section class="Interaccion">
-        <form action="Mensajeria">
+        <form> <!--/Mensajeria por server.on("/Mensajeria", HTTP_GET, ...);-->
             <label>Mensaje:</label>
-            <textarea placeholder="Escribe tu comentario..." rows="6" cols="40" maxlength="500"></textarea>
+            <textarea id="inputEnviarMensaje" placeholder="Escribe tu comentario..." rows="6" cols="40" maxlength="500"></textarea>
             <div>
-                <button>Enviar</button>
+                <button onclick="enviarMensaje()">Enviar</button>
                 <button>Sumbar</button>
             </div>
         </form>
     </section>
 </body>
-
 </html>
