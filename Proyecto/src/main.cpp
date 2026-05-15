@@ -19,6 +19,21 @@ void handleMensaje(){
   server.send(200, "text/plain", mensajeESP);
 }
 
+//Primero el ESP usa handlemensaje para subir el mensaje. Cuando yo
+//actualizo, envia una consulta aqui y actualiza el mensajeESP
+//entonces ahora en la funcion "cargarmensaje" se carga el nuevo mensaje
+//ya que habla con el servidor que detecto un cambio.
+void handleEnviarMensaje(){
+  if(server.hasArg("mensaje")){
+    mensajeESP = server.arg("mensaje");
+
+    Serial.println("Nuevo mensaje:");
+    Serial.println(mensajeESP);
+    
+    server.send(200, "text/plain", "Mensaje actualizado");
+  }
+}
+
 // ===================================
 // ===================================
 // FILESYSTEM
@@ -112,6 +127,7 @@ void setup(void) {
 
   //Registrar endpoint para la interaccion ESP32-Frontend
   server.on("/mensaje", HTTP_GET, handleMensaje);
+  server.on("/enviar", HTTP_POST, handleEnviarMensaje);
 
   // ----------------------------------------------------
   server.onNotFound(handleNotFound);

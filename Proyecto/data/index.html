@@ -28,6 +28,21 @@
 
     <script>
 
+        async function enviarMensaje(){
+            const texto = document.getElementById("inputEnviarMensaje").value;
+
+            await fetch("/enviar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "mensaje=" + encodeURIComponent(texto)
+            });
+
+            cargarMensaje();
+        }
+
+
         async function cargarMensaje(){
             const respuesta = await fetch("/mensaje");
             const texto = await respuesta.text();
