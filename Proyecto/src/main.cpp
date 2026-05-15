@@ -8,6 +8,16 @@ const char *password = "miwifiesp";
 
 WebServer server(80);
 
+String mensajeESP = "hola mundo";
+
+// ===================================
+// ===================================
+// INTERACCION ESP32 CON FRONTEND
+// ===================================
+// ===================================
+void handleMensaje(){
+  server.send(200, "text/plain", mensajeESP);
+}
 
 // ===================================
 // ===================================
@@ -100,6 +110,10 @@ void setup(void) {
   server.on("/index.html", HTTP_GET, handleIndex);
   server.on("/style.css", HTTP_GET, handleCSS);
 
+  //Registrar endpoint para la interaccion ESP32-Frontend
+  server.on("/mensaje", HTTP_GET, handleMensaje);
+
+  // ----------------------------------------------------
   server.onNotFound(handleNotFound);
 
   server.begin();

@@ -25,5 +25,17 @@
             </div>
         </form>
     </section>
+
+    <script>
+
+        async function cargarMensaje(){
+            const respuesta = await fetch("/mensaje");
+            const texto = await respuesta.text();
+
+            document.getElementById("bandejaEntradaESP").value = texto;
+        }
+
+        cargarMensaje();
+    </script>
 </body>
 </html>
